@@ -15,21 +15,22 @@ public class CustomerTest {
         
             if (cmrChooseMenu == 0){
                 
-                int xDeposit = Integer.parseInt((String) JOptionPane.showInputDialog(null, "How much do you want to deposit: "));
-                methodsCustomer.deposit(xDeposit);
+                xDeposit = Integer.parseInt((String) JOptionPane.showInputDialog(null, "How much do you want to deposit: "));
+                try {
+                    methodsCustomer.deposit(xDeposit);
                 JOptionPane.showMessageDialog(null, "You add " + xDeposit + " in your balance");
-                methodsCustomer.returnMenu();
-            
+                } finally {
+                    methodsCustomer.returnMenu();
+                }
+
             } else if (cmrChooseMenu == 1){
                 
                     xDeposit = Integer.parseInt((String) JOptionPane.showInputDialog(null, "How much do you want to withdraw: "));
                     try {
                         methodsCustomer.withdraw(xDeposit);
                     } catch (InsufficientBalanceException ibe) {
-                        JOptionPane.showMessageDialog(null, "You have insufficient balance in your account");
-                        ibe.printStackTrace();
-                        
-                    } finally {
+                        JOptionPane.showMessageDialog(null, "You have insufficient balance in your account");                       
+                    }finally {
                         methodsCustomer.returnMenu();
                     } 
     

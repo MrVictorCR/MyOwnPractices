@@ -50,8 +50,12 @@ public class Customer{
 
     // Methods
 
-    public void deposit(int deposit){
-        this.balance += deposit;
+    public void deposit(int deposit) throws NumberFormatException{
+        if (deposit > 0){
+            this.balance += deposit;
+        } else {
+            throw new NumberFormatException();
+        }
     }
 
     public void withdraw(int deposit) throws InsufficientBalanceException{ 
