@@ -77,7 +77,7 @@ def secMenu():
                   "Enjoy the rest of your day :) \n\t")
             z = False
         else:
-            print("Error -> The Option you chosee doesn't exist \n")
+            raise ValueError ("Error -> The Option you chosee doesn't exist \n")
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
         z = True
@@ -100,10 +100,13 @@ while(z):
     try:
 
         if x == 1:
-            y = int(input("""
+            y = (input("""
 What would be the amount that you want to deposit?
 --------- """))
-            balance = deposit(balance, y)
+            if y != int:
+                raise ValueError ("Error -> The Amount should be in numbers \n")
+            else:
+                balance = deposit(balance, y)
 
         elif x == 2:
             y = int(input("""
@@ -115,7 +118,7 @@ What would be the amount that you want to withdraw?
             show(balance)
 
         else:
-            print("Error -> The Option you chosee doesn't exist \n")
+            raise ValueError ("Error -> The Option you chosee doesn't exist \n")
 
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
