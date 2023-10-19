@@ -77,7 +77,7 @@ def secMenu():
                   "Enjoy the rest of your day :) \n\t")
             z = False
         else:
-            raise ValueError ("Error -> The Option you chosee doesn't exist \n")
+            print("Error -> The Option you chosee doesn't exist \n")
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
         z = True
@@ -115,7 +115,7 @@ What would be the amount that you want to withdraw?
             show(balance)
 
         else:
-            raise ValueError ("Error -> The Option you chosee doesn't exist \n")
+            print("Error -> The Option you chosee doesn't exist \n")
 
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
