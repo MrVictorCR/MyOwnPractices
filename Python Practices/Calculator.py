@@ -73,7 +73,7 @@ def sum(num1, num2):
 
 def res(num1, num2):
     total = num1 - num2
-    print(f"\n\tRes Result: {total}\n")
+    print(f"\n\Subtraction Result: {total}\n")
     return total
 
 def mult(num1, num2):
@@ -87,7 +87,7 @@ def div(num1, num2):
         raise ZeroDivisionError ("Error -> It can't be divitions between '0'\n")
     else:
         total = num1 / num2
-        print(f"\n\tDivition Result: {total}\n")
+        print(f"\n\Division Result: {total}\n")
 
 #------------------------#
 
@@ -111,7 +111,7 @@ def secMenu(z):
                     "\tEnjoy the rest of your day :) \n")
                 z = False
             else:
-                raise ValueError ("Error -> The Option you chosee doesn't exist \n")
+                raise ValueError ("Error -> The Option you chose doesn't exist \n")
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
         print(f"Your result right now is: {total}\n")
@@ -130,7 +130,7 @@ while(z):
 
     #- Menu Call -#
     x = menu()
-
+    
     try:
         if x == 1: 
             num1, num2 = numRequest(z, total)
@@ -152,13 +152,12 @@ while(z):
                     "\tEnjoy the rest of your day :) \n")
             c = False
         else:
-            raise ValueError ("Error -> The Option you chosee doesn't exist \n")
+            raise ValueError ("Error -> The Option you chose doesn't exist \n")
 
     except ValueError as UnexpectedNumber:
         print(total)
         print(UnexpectedNumber)
     except ZeroDivisionError as zde:
-        print(total)
         print(zde)
         z = False
 
