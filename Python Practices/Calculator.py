@@ -11,6 +11,7 @@ total = 0
 num1 = 0
 num2 = 0
 z = bool
+c = True
 
 #-----------------------------------#
 
@@ -19,11 +20,11 @@ z = bool
 def menu():
     try:
         x = int(input(("""\t...:Menu:...
-1. Suma
-2. Resta
-3. Multiplicación
-4. División
-5. Salir
+1. Sum
+2. Subtract
+3. Multiply
+4. Divide
+5. Exit
 ----------------- """)))
     
     except ValueError as UnexpectedNumber:
@@ -113,7 +114,7 @@ def secMenu(z):
                 raise ValueError ("Error -> The Option you chosee doesn't exist \n")
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
-        z = True
+        print(f"Your result right now is: {total}\n")
 
     finally:
         return z
@@ -146,18 +147,26 @@ while(z):
         elif x == 4:
             num1, num2 = numRequest(z, total)
             total = div(num1, num2)
-
+        elif x == 5:
+            print("\n\tThank you for using our services!\n" +
+                    "\tEnjoy the rest of your day :) \n")
+            c = False
         else:
             raise ValueError ("Error -> The Option you chosee doesn't exist \n")
 
     except ValueError as UnexpectedNumber:
+        print(total)
         print(UnexpectedNumber)
     except ZeroDivisionError as zde:
+        print(total)
         print(zde)
         z = False
 
     finally:
-        z = secMenu(z)
+        if c == False:
+            break
+        else:
+            z = secMenu(z)
 
 #----------------#
 
