@@ -1,8 +1,12 @@
-
-
-
 """
-Tengo un error con las excepciones, deberia de buscar como se lanzan y como las puedo atrapar, porque cuando lo hago parece que solo la lanzo pero no hay nada que lo atrape
+    Welcome to my Calculator.py
+        You will be able to choose the arithmetic option
+        In this case this calculator is going to work with 2 different numbers.
+        Once you receive the result you will be asked if you want to do another arithmetic option with that result
+        Depending on that you will need to enter a new number to complete the process
+
+    I created this Calculator in order to practice:
+        Functions, Exceptions, Return Functions, Loops and Conditionals
 """
 
 #- Vars that I need in the program -#
