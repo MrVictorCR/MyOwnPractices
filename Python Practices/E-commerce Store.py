@@ -72,7 +72,7 @@ def secMenu():
             print(f"\nYour total is: {total}$")
             descount = total * 0.15
             finalPrice = total - descount
-            print(f"Debido al 15% de descuento en la tienda, el total a pagar será: {finalPrice}$\n")
+            print(f"Due to the 15% discount in the store, the total payable will be: {finalPrice}$\n")
             print("\tThank you for using our services today! :)\n")
             
             condition = False
