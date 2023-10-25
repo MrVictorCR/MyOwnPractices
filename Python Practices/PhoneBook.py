@@ -48,6 +48,7 @@ def addNC(name, phone):
     if name not in agenda:
             agenda[name] = phone
             print("Contact added")
+
     else: 
         print("The contact already Exist\n")
 
@@ -61,10 +62,12 @@ def delContact(name):
 
 def vContact():
 
-    print("\n\t#-- PhoneBook --#\n")
-
-    for key,value in agenda.items():
-        print(f"Name: {key}, Phone #: {value}") 
+    if len(agenda) == 0:
+        print("\n\tThere is not contact added yet :)")
+    else:
+        print("\n\t#-- PhoneBook --#\n")
+        for key,value in agenda.items():
+            print(f"Name: {key}, Phone #: {value}") 
 
 #----------------------------#
 
@@ -81,8 +84,8 @@ def secMenu():
         
         elif c == 2:
 
-            print("\nThank you for using our services!\n\t" +
-                  "Enjoy the rest of your day :) \n\t")
+            print("\n\tThank you for using our services!\n\t" +
+                  "Enjoy the rest of your day :)\n")
             
             condition = False
 
@@ -115,14 +118,14 @@ while(condition):
             phone = input("Contact Phone Number: ")
             addNC(name, phone)
         
-        if opt == 2:
+        elif opt == 2:
             name = input("Contact Name: ")
             delContact(name)
         
-        if opt == 3:
+        elif opt == 3:
             vContact()
         
-        if opt == 4:
+        elif opt == 4:
             print("\n\tThank you for using our services!\n" +
                     "\tEnjoy the rest of your day :) \n")
             c = False
