@@ -18,21 +18,11 @@
     I will be working with classes, conditionals, loops, so on.
 """
 
-# Guardar la info de esta manera, un dict en el que la key será el ID y el value será de ser posible una list, si no es el caso ya veremos como lo hacemos
-
-
 #- Vars that I need in the program -#
 
 database = []
 condition = bool
-
-iD = ''
-firstName = ''
-lastName = ''
-phoneNumber = ''
-age = ''
-address = ''
-
+exitOption = False
 
 #-----------------------------------#
 
@@ -61,7 +51,7 @@ def menu():
 
 def secMenu():
     try:
-        print("Do you want to do something else?")
+        print("\nDo you want to do something else?")
         c = int(input("1. Yes\n" +
                             "2. Exit\n------- "))
 
@@ -100,13 +90,25 @@ def add_a_new_student(iD, firstName, lastName, phoneNumber, age, address):
 
     print('\nStudent added')
 
+# What if I want to add a student with the same ID? - For that reason I created this for, to determine that the ID is not in 'database'           
+def id_already_exist(iD):
+    
+    for i in database:
+        if i['ID'] == iD:
+            idAlreadyExist = True
+        else:
+            idAlreadyExist = False
+
+    return idAlreadyExist
+         
+
 def search_a_student(iD):
 
     for i in database:
         if i['ID'] == iD:
             student = (f"Name: {i['Fist Name']}, Last Name: {i['Last Name']}, Phone Number: {i['Phone Number']}, Age: {i['Age']}, Address: {i['Address']}")
             return student
-        return False
+    return False
 
 def delete_a_student():
 
@@ -118,22 +120,81 @@ def delete_a_student():
 
 def show_students():
 
-    if i <= len(database):
-        for i in database:
-            print(f"Name: {i['Fist Name']}, Last Name: {i['Last Name']}, Phone Number: {i['Phone Number']}, Age: {i['Age']}, Address: {i['Address']}")
+    if len(database) == 0:
+        print("\n\tWe didn't add a Student yet")
     else:
-        print("We didn't add a Student yet")
+        print('\nShowing evey Student save in our DB')
+        for i in database:
+            print(f"\n\tName: {i['Fist Name']}, Last Name: {i['Last Name']}, Phone Number: {i['Phone Number']}, Age: {i['Age']}, Address: {i['Address']}")
+        
 
 #-----------------------#
 
 #- MAIN PROGRAM -# 
 
-print('\n\tWelcome to SVS Students DataBase')
+print('\n\t-__Welcome to SVS Students DataBase__-')
 
-# To-do 
-# while(condition):
+while(condition):
 
+    option = menu()
 
+    try:
+        if option == 1:
+            iD = input('\nWhat is the Student ID?\n' +
+                       '-------------------- ')
+            if id_already_exist(iD):
+                print('There is a Student already added with that ID')
+            else:
+                firstName = input('\nWhat is the Student First Name?\n' +
+                        '-------------------- ')
+                lastName = input('\nWhat is the Student Last Name?\n' +
+                        '-------------------- ')
+                phoneNumber = input('\nWhat is the Student Phone Number?\n' +
+                        '-------------------- ')
+                age = input('\nWhat is the Student Age?\n' +
+                        '-------------------- ')
+                address = input('\nWhat is the Student Address?\n' +
+                        '-------------------- ')
+                add_a_new_student(iD, firstName, lastName, phoneNumber, age, address)
+            
+
+        elif option == 2:
+            iD = input('\nWhat is the Student ID?\n' +
+                       '-------------------- ')
+            if search_a_student(iD) == False:
+                print("\nThe Student doesn't exist")
+            else:
+                print('\nStudent Found\n')
+                print(search_a_student(iD))
+
+        elif option == 3:
+            iD = input('\nWhat is the Student ID\n?' +
+                       '-------------------- ')
+            if delete_a_student(iD):
+                print('\nStudent Removed')
+            else:
+                print("\nThe Student doesn't exist")
+        
+        elif option == 4:
+            show_students()
+
+        elif option == 5:
+            print("\n\tThank you for using our services!\n" +
+                        "\tEnjoy the rest of your day :) \n")
+            exitOption = True
+
+        else:
+            raise ValueError ("\nError -> The Option you chosee doesn't exist")
+        
+    except ValueError as UnexpectedOption:
+        print(UnexpectedOption)
+
+    finally:
+        if exitOption == True:
+            break
+            
+        else:
+            contion = secMenu()
 
 #----------------#
 
