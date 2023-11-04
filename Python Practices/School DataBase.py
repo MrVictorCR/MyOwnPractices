@@ -18,61 +18,64 @@
     I will be working with classes, conditionals, loops, so on.
 """
 
-#- Vars that I need in the program -#
+# - Vars that I need in the program -#
 
 database = []
 condition = bool
 exitOption = False
 
-#-----------------------------------#
+# -----------------------------------#
 
-#- Main Menu: Displays the options that the DataBase is going to have -#
+# - Main Menu: Displays the options that the DataBase is going to have -#
+
 
 def menu():
 
-    try: 
-         x = int(input(f"""
+    try:
+        x = int(input(f"""
 1. To Add a New Student
 2. To Search a Student
 3. To Delete a Student
 4. To See Every Student in the DB
 5. Exit
 --------------------------------- """))
-        
+
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
-    
+
     finally:
         return x
 
-#----------------------------------------------------------------------#
+# ----------------------------------------------------------------------#
 
-#- "Secondary Menu ('secMenu'): this will help when you will be requested if you want to use another function" -#
+# - "Secondary Menu ('secMenu'): this will help when you will be requested if you want to use another function" -#
+
 
 def secMenu():
     try:
         print("\nDo you want to do something else?")
         c = int(input("1. Yes\n" +
-                            "2. Exit\n------- "))
+                      "2. Exit\n------- "))
 
         if c == 1:
-            z = True
+            condition = True
         elif c == 2:
-            print("\nThank you for using our services!\n\t" +
-                  "Enjoy the rest of your day :) \n\t")
-            z = False
+            print("\n\tThank you for using our services!\n\t" +
+                  "Enjoy the rest of your day :) \n")
+            condition = False
         else:
-            raise ValueError ("Error -> The Option you chosee doesn't exist \n")
-    except ValueError as UnexpectedNumber:
-        print(UnexpectedNumber)
-        z = True
+            raise ValueError("Error -> The Option you chosee doesn't exist \n")
+    except ValueError as UnexpectedOption:
+        print(UnexpectedOption)
+        condition = True
 
     finally:
-        return z
+        return condition
 
-#--------------------------------------------------------------------------------------------------------------#
+# --------------------------------------------------------------------------------------------------------------#
 
-#- Adding DB Functions -#
+# - Adding DB Functions -#
+
 
 def add_a_new_student(iD, firstName, lastName, phoneNumber, age, address):
 
@@ -90,33 +93,41 @@ def add_a_new_student(iD, firstName, lastName, phoneNumber, age, address):
 
     print('\nStudent added')
 
-# What if I want to add a student with the same ID? - For that reason I created this for, to determine that the ID is not in 'database'           
+# What if I want to add a student with the same ID? - For that reason I created this for, to determine that the ID is not in 'database'
+
+
 def id_already_exist(iD):
-    
-    for i in database:
-        if i['ID'] == iD:
-            idAlreadyExist = True
-        else:
-            idAlreadyExist = False
+
+    if len(database) == 0:
+        idAlreadyExist = False
+    else:
+        for i in database:
+            if i['ID'] == iD:
+                idAlreadyExist = True
+            else:
+                idAlreadyExist = False
 
     return idAlreadyExist
-         
+
 
 def search_a_student(iD):
 
     for i in database:
         if i['ID'] == iD:
-            student = (f"Name: {i['Fist Name']}, Last Name: {i['Last Name']}, Phone Number: {i['Phone Number']}, Age: {i['Age']}, Address: {i['Address']}")
+            student = (
+                f"Name: {i['Fist Name']}, Last Name: {i['Last Name']}, Phone Number: {i['Phone Number']}, Age: {i['Age']}, Address: {i['Address']}")
             return student
     return False
 
-def delete_a_student():
+
+def delete_a_student(iD):
 
     for i in database:
         if i['ID'] == iD:
             database.remove(i)
             return True
         return False
+
 
 def show_students():
 
@@ -125,16 +136,17 @@ def show_students():
     else:
         print('\nShowing evey Student save in our DB')
         for i in database:
-            print(f"\n\tName: {i['Fist Name']}, Last Name: {i['Last Name']}, Phone Number: {i['Phone Number']}, Age: {i['Age']}, Address: {i['Address']}")
-        
+            print(
+                f"\n\tName: {i['Fist Name']}, Last Name: {i['Last Name']}, Phone Number: {i['Phone Number']}, Age: {i['Age']}, Address: {i['Address']}")
 
-#-----------------------#
 
-#- MAIN PROGRAM -# 
+# -----------------------#
+
+# - MAIN PROGRAM -#
 
 print('\n\t-__Welcome to SVS Students DataBase__-')
 
-while(condition):
+while (condition):
 
     option = menu()
 
@@ -142,21 +154,22 @@ while(condition):
         if option == 1:
             iD = input('\nWhat is the Student ID?\n' +
                        '-------------------- ')
+            # Parece que la siguiente linea da un problema xd
             if id_already_exist(iD):
                 print('There is a Student already added with that ID')
             else:
                 firstName = input('\nWhat is the Student First Name?\n' +
-                        '-------------------- ')
+                                  '-------------------- ')
                 lastName = input('\nWhat is the Student Last Name?\n' +
-                        '-------------------- ')
+                                 '-------------------- ')
                 phoneNumber = input('\nWhat is the Student Phone Number?\n' +
-                        '-------------------- ')
+                                    '-------------------- ')
                 age = input('\nWhat is the Student Age?\n' +
-                        '-------------------- ')
+                            '-------------------- ')
                 address = input('\nWhat is the Student Address?\n' +
-                        '-------------------- ')
-                add_a_new_student(iD, firstName, lastName, phoneNumber, age, address)
-            
+                                '-------------------- ')
+                add_a_new_student(iD, firstName, lastName,
+                                  phoneNumber, age, address)
 
         elif option == 2:
             iD = input('\nWhat is the Student ID?\n' +
@@ -168,34 +181,34 @@ while(condition):
                 print(search_a_student(iD))
 
         elif option == 3:
-            iD = input('\nWhat is the Student ID\n?' +
+            iD = input('\nWhat is the Student ID?\n' +
                        '-------------------- ')
             if delete_a_student(iD):
                 print('\nStudent Removed')
             else:
                 print("\nThe Student doesn't exist")
-        
+
         elif option == 4:
             show_students()
 
         elif option == 5:
             print("\n\tThank you for using our services!\n" +
-                        "\tEnjoy the rest of your day :) \n")
+                  "\tEnjoy the rest of your day :) \n")
             exitOption = True
 
         else:
-            raise ValueError ("\nError -> The Option you chosee doesn't exist")
-        
+            raise ValueError("\nError -> The Option you chosee doesn't exist")
+
     except ValueError as UnexpectedOption:
         print(UnexpectedOption)
 
     finally:
         if exitOption == True:
             break
-            
+
         else:
-            contion = secMenu()
+            condition = secMenu()
 
-#----------------#
+# ----------------#
 
-#-    E n d    -#
+# -    E n d    -#
