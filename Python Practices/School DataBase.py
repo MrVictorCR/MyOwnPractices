@@ -15,7 +15,7 @@
         Delete a student 
         See all the database
 
-    I will be working with classes, conditionals, loops, so on.
+    I will be working with functions, conditionals, loops, so on.
 """
 
 # - Vars that I need in the program -#
@@ -154,7 +154,6 @@ while (condition):
         if option == 1:
             iD = input('\nWhat is the Student ID?\n' +
                        '-------------------- ')
-            # Parece que la siguiente linea da un problema xd
             if id_already_exist(iD):
                 print('There is a Student already added with that ID')
             else:
