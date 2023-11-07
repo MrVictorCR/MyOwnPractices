@@ -39,6 +39,7 @@ dishDatabase = []
 dishXRestaurant = []
 condition = bool
 exitOption = False
+saveDishCondition = bool
 
 # -----------------------------------#
 
@@ -151,7 +152,7 @@ def add_a_dish(dishID, dishName, price, quantity):
     miniDishDict['Price'] = price
     miniDishDict['Quantity'] = quantity
 
-    restaurantDatabase.append(miniDishDict)
+    dishDatabase.append(miniDishDict)
 
     print('\nDish added')
 
@@ -161,7 +162,7 @@ def dish_id_already_exist(dishID):
     if len(dishDatabase) == 0:
         idAlreadyExist = False
     else:
-        for i in restaurantDatabase:
+        for i in dishDatabase:
             if i['ID'] == dishID:
                 idAlreadyExist = True
             else:
@@ -174,10 +175,10 @@ def view_dishes():
     if len(dishDatabase) == 0:
         print("\n\tWe didn't add a Dish yet")
     else:
-        print('\nShowing evey Dish save in our DB')
-        for i in restaurantDatabase:
+        print('\nShowing every Dish save in our DB')
+        for i in dishDatabase:
             print(
-                f"\n\Dish: {i['Dish Name']}, Price: {i['Price']}, Amount: {i['Amount']}")
+                f"\n\tDish: {i['Dish Name']}, Price: {i['Price']}, Quantity: {i['Quantity']}")
 
 
 def delete_dish(dishID):
@@ -188,21 +189,89 @@ def delete_dish(dishID):
         return False
 
 
-"""
-    I will need to think about how to add a dish to a X restaurant, tengo que conseguir con el id de restaurante el rest obv
-    luego el id del dish, tengo que tomar en cuenta que debo de preguntar si quiere agregar algun otro plato a ese restaurante
+def add_another_dish():
+    try:
+        print("\nDo you want to do add another dish?")
+        opt = int(input("1. Yes\n" +
+                        "2. Exit\n------- "))
 
-    tomando en cuenta eso es como debemos de construir el programa
-"""
+        if opt == 1:
+            saveDishCondition = True
+        elif opt == 2:
+            saveDishCondition = False
+        else:
+            raise ValueError("Error -> The Option you chosee doesn't exist \n")
+    except ValueError as UnexpectedOption:
+        print(UnexpectedOption)
+        saveDishCondition = True
 
-# def add_a_dish_to_a_restuarant():
+    finally:
+        return saveDishCondition
 
-# def view_all_dishes_connected_to_a_restaurant():
 
+def get_info_from_resturant():
+    for i in restaurantDatabase:
+        print(
+            f"ID: {i['ID']}, Restaurant Name: {i['Restaurant Name']}")
+    restaurantOption = int(input('What is the Restaurant ID that you want to choose?\n' +
+                                 '-----------------------------------  '))
+    for i in restaurantDatabase:
+        if i['ID'] == restaurantOption:
+            rest = (f"Restaurant: {i['Restaurant Name']}")
+
+    return rest
+
+
+def get_info_from_dish():
+    for i in dishDatabase:
+        print(
+            f"ID: {i['ID']}, Dish Name: {i['Dish Name']}")
+    dishOption = int(input('What is the Dish ID that you want to choose?\n' +
+                           '-----------------------------------  '))
+
+    for i in dishDatabase:
+        if i['ID'] == dishID:
+            dish = (f"Dish: {i['Dish Name']}")
+
+    return dish, dishOption
+
+
+def add_a_dish_to_a_restuarant(dishID, rest, dish):
+    miniDishxRestaurantDict = {}
+
+    miniDishxRestaurantDict['ID'] = dishID
+    miniDishxRestaurantDict['Restaurant'] = rest
+    miniDishxRestaurantDict['Dish'] = dish
+
+    dishXRestaurant.append(miniDishxRestaurantDict)
+
+    print('\nDish added to the Restaurant')
+
+
+def view_all_dishes_connected_to_a_restaurant():
+    x = 0
+    if len(dishXRestaurant) == 0:
+        print('There is not a Dish linked to a Restaurant yet')
+    else:
+        for i in dishXRestaurant:
+            if i['ID'] == x:
+                print()
+            elif i['ID'] != x:
+                print(f"ID: {i['ID']}, {i['Restaurant']}")
+                x = i['ID']
+    try:
+        restOption = int(input('What is the ID from the Restaurant that you want to see their Dishes added?:\n' +
+                               '------------------------- '))
+        for i in dishXRestaurant:
+            if i['ID'] == restOption:
+                print(f"{i['Dish']}")
+    except ValueError as UnexpectedOption:
+        print(UnexpectedOption)
 
 # -----------------------#
 
 # - MAIN PROGRAM -#
+
 
 print('\n\t-__Welcome to SVS Restaurants DataBase__-')
 
@@ -212,8 +281,8 @@ while (condition):
 
     try:
         if option == 1:
-            restaurantID = input('\nWhat is the Restaurant ID?\n' +
-                                 '-------------------- ')
+            restaurantID = int(input('\nWhat is the Restaurant ID?\n' +
+                                     '-------------------- '))
             if rest_id_already_exist(restaurantID):
                 print('There is a Restaurant already added with that ID')
             else:
@@ -230,16 +299,16 @@ while (condition):
             view_restuarants()
 
         elif option == 3:
-            restaurantID = input('\nWhat is the Restaurant ID?\n' +
-                                 '-------------------- ')
+            restaurantID = int(input('\nWhat is the Restaurant ID?\n' +
+                                     '-------------------- '))
             if delete_restuarant(restaurantID):
                 print('\nRestaurant Removed')
             else:
                 print("\nThe Restaurant doesn't exist")
 
         elif option == 4:
-            dishID = input('\nWhat is the Dish ID?\n' +
-                           '-------------------- ')
+            dishID = int(input('\nWhat is the Dish ID?\n' +
+                               '-------------------- '))
             if dish_id_already_exist(dishID):
                 print('There is a Dish already added with that ID')
             else:
@@ -255,15 +324,29 @@ while (condition):
             view_dishes()
 
         elif option == 6:
-            dishID = input('\nWhat is the Dish ID?\n' +
-                           '-------------------- ')
+            dishID = int(input('\nWhat is the Dish ID?\n' +
+                               '-------------------- '))
             if delete_dish(dishID):
                 print('\nRestaurant Removed')
             else:
                 print("\nThe Dish doesn't exist")
 
-        # elif option == 7:
-        # elif option == 8:
+        elif option == 7:
+            if len(restaurantDatabase) == 0:
+                print('There is not a Restaurant added yet')
+            else:
+                if len(dishDatabase) == 0:
+                    print('We cannot add a Dish, because there is not a Dish added yet')
+                else:
+                    rest = get_info_from_resturant()
+                    # A loop to save the dishes the amount that the user wants
+                    while (saveDishCondition):
+                        dish, dishOption = get_info_from_dish()
+                        add_a_dish_to_a_restuarant(dishOption, rest, dish)
+                        saveDishCondition = add_another_dish()
+
+        elif option == 8:
+            view_all_dishes_connected_to_a_restaurant()
         elif option == 9:
             print("\n\tThank you for using our services!\n" +
                   "\tEnjoy the rest of your day :) \n")
