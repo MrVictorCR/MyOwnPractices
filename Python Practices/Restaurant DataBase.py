@@ -198,6 +198,7 @@ def add_another_dish():
         if opt == 1:
             saveDishCondition = True
         elif opt == 2:
+            print('All the Dishes were added')
             saveDishCondition = False
         else:
             raise ValueError("Error -> The Option you chosee doesn't exist \n")
@@ -219,7 +220,7 @@ def get_info_from_resturant():
         if i['ID'] == restaurantOption:
             rest = (f"Restaurant: {i['Restaurant Name']}")
 
-    return rest
+    return rest, restaurantOption
 
 
 def get_info_from_dish():
@@ -230,10 +231,10 @@ def get_info_from_dish():
                            '-----------------------------------  '))
 
     for i in dishDatabase:
-        if i['ID'] == dishID:
+        if i['ID'] == dishOption:
             dish = (f"Dish: {i['Dish Name']}")
 
-    return dish, dishOption
+    return dish
 
 
 def add_a_dish_to_a_restuarant(dishID, rest, dish):
@@ -253,18 +254,24 @@ def view_all_dishes_connected_to_a_restaurant():
     if len(dishXRestaurant) == 0:
         print('There is not a Dish linked to a Restaurant yet')
     else:
+        print()
         for i in dishXRestaurant:
             if i['ID'] == x:
-                print()
+                continue
             elif i['ID'] != x:
                 print(f"ID: {i['ID']}, {i['Restaurant']}")
                 x = i['ID']
+                # To do not print the same Restaurant different times
+                if i['Restaurant'] == i['Restaurant']:
+                    continue
+
     try:
-        restOption = int(input('What is the ID from the Restaurant that you want to see their Dishes added?:\n' +
+        restOption = int(input('\nWhat is the ID from the Restaurant that you want to see their Dishes added?:\n' +
                                '------------------------- '))
         for i in dishXRestaurant:
             if i['ID'] == restOption:
                 print(f"{i['Dish']}")
+        print('All the Dishes were showed')
     except ValueError as UnexpectedOption:
         print(UnexpectedOption)
 
@@ -332,17 +339,20 @@ while (condition):
                 print("\nThe Dish doesn't exist")
 
         elif option == 7:
+            saveDishCondition = True
             if len(restaurantDatabase) == 0:
                 print('There is not a Restaurant added yet')
             else:
                 if len(dishDatabase) == 0:
                     print('We cannot add a Dish, because there is not a Dish added yet')
                 else:
-                    rest = get_info_from_resturant()
+                    rest, restOption = get_info_from_resturant()
                     # A loop to save the dishes the amount that the user wants
+
+                    # What happend is that the save this condition is going to be false once I finish add_another_dish
                     while (saveDishCondition):
-                        dish, dishOption = get_info_from_dish()
-                        add_a_dish_to_a_restuarant(dishOption, rest, dish)
+                        dish = get_info_from_dish()
+                        add_a_dish_to_a_restuarant(restOption, rest, dish)
                         saveDishCondition = add_another_dish()
 
         elif option == 8:
