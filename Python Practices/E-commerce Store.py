@@ -4,9 +4,10 @@
 
     I was specifically working on the return functions
 
-    Also, as soon as I can I will add some news in the clothes features, for example:
-        Color
-        Size, so on
+    Also, as soon as I can I will add 'How do you want to pay?' , for example:
+        Cash
+        Debit Card
+        Credit Card
     That will be added in future versions
 """
 
@@ -147,13 +148,73 @@ def addSueter(total):
         finally:
             miniCondition = False
             total += sueter
-            return sueterSize, sueterColor, total
+            return sueterColor, sueterSize, total
 
 
 def addPants(total):
-    total += pants
+
+    pantsColorList = ['White', 'Black', 'Blue']
+    pantsSizeList = [28, 30, 32, 34, 36, 38]
+
+    miniCondition = True
+
+    while (miniCondition):
+
+        try:
+            print("\nWhat is the color that you want to buy?")
+            pantsColor = int(input("1. White\n" +
+                                   "2. Black\n" +
+                                   "3. Blue\n------- "))
+            if pantsColor == 1:
+                pantsColor = pantsColorList[0]
+                print('Color added\n')
+            elif pantsColor == 2:
+                pantsColor = pantsColorList[1]
+                print('Color added\n')
+            elif pantsColor == 3:
+                pantsColor = pantsColorList[2]
+                print('Color added\n')
+            else:
+                pantsColor = 0
+                raise ValueError(
+                    "Error -> The Option you chosee doesn't exist \n")
+
+            print("\nWhat is the color that you want to buy?")
+            pantsSize = int(input("1. 28\n" +
+                                  "2. 30\n" +
+                                  "3. 32\n" +
+                                  "4. 34\n" +
+                                  "5. 36\n" +
+                                  "6. 38\n------- "))
+            if pantsSize == 1:
+                pantsSize = pantsSizeList[0]
+                print('Size added\n')
+            elif pantsSize == 2:
+                pantsSize = pantsSizeList[1]
+                print('Size added\n')
+            elif pantsSize == 3:
+                pantsSize = pantsSizeList[2]
+                print('Size added\n')
+            elif pantsSize == 4:
+                pantsSize = pantsSizeList[3]
+                print('Size added\n')
+            elif pantsSize == 5:
+                pantsSize = pantsSizeList[4]
+                print('Size added\n')
+            elif pantsSize == 6:
+                pantsSize = pantsSizeList[5]
+                print('Size added\n')
+            else:
+                pantsSize = 0
+                raise ValueError(
+                    "Error -> The Option you chosee doesn't exist \n")
+
+        finally:
+            miniCondition = False
+            total += pants
+            return pantsColor, pantsSize, total
     print("Pants added\n")
-    return total
+
 
 # ------------------------------------------------------------#
 
@@ -197,9 +258,9 @@ print("\n\tWelcome to my E-commerce Store")
 print(f"""
 |---------------------|
 |    What we Sell?    |
-|        Shoes        |
-|        Sueter       |
-|        Pants        |
+|  Shoes price: {shoes}$   |
+|  Sueter price: {sueter}$  |
+|  Pants price: {pants}$   |
 |---------------------|""")
 
 # - Loop Call -#
@@ -215,10 +276,14 @@ while (condition):
                 f"Shoes added: Shoes Color: {shoesColor}, Shoes Size: {shoesSize}, the total is: {total}")
 
         elif irequested == 2:
-            total = addSueter(total)
+            sueterColor, sueterSize, total = addSueter(total)
+            print(
+                f"Sueter added: Sueter Color: {sueterColor}, Sueter Size: {sueterSize}, the total is: {total}")
 
         elif irequested == 3:
-            total = addPants(total)
+            pantsColor, pantsSize, total = addPants(total)
+            print(
+                f"Pants added: Pants Color: {pantsColor}, Pants Size: {pantsSize}, the total is: {total}")
 
         else:
             raise ValueError("Error -> The Option you chosee doesn't exist \n")
