@@ -116,6 +116,8 @@ def createAccountNumber(iD, name, lastName):
 
     customers.append(customerDict)
 
+    print('Customer Account created, your account number is: ' + accountNumber)
+
 
 def id_already_exist(iD):
 
@@ -151,7 +153,10 @@ def createDebitCardNumber(iD):
                 debitCardDict['Debit Card Number'] = debitCardNumber
 
                 customersDebitCards.append(debitCardDict)
-                print('Debit Card added')
+                print('Debit Card added' +
+                      'Your debit card number is: ' +
+                      debitCardNumber)
+
     else:
 
         print("The customer doesn't exits")
@@ -169,6 +174,30 @@ def seeYourInfo(iD):
 # -------------------------#
 
 # - Adding ATM Functions -#
+
+# I need to work with this specifics functions in order to add the bank account, making sure that it exist and so on
+
+
+def get_customers_name(iD):
+
+    for i in customers:
+        if i['ID'] == iD:
+            cxName = (f"{i['Name']}")
+    return cxName
+
+
+def customer_exist(iD):
+
+    if len(customersDebitCards) == 0:
+        customerExist = False
+    else:
+        for i in customersDebitCards:
+            if i['ID'] == iD:
+                customerExist = True
+            else:
+                customerExist = False
+
+    return customerExist
 
 
 def deposit(balance, y):
@@ -272,28 +301,52 @@ while (z):
         if x == 2:
             option = atmMenu()
 
-            if x == 1:
-                y = (input("""
-        What would be the amount that you want to deposit?
-        --------- """))
-                if y != int:
-                    raise ValueError(
-                        "Error -> The Amount should be in numbers \n")
+            if option == 1:
+                print(
+                    '\nFirstable you need to provide your information in order to pull up your account')
+                iD = int(input('\nWhat is your ID?\n' +
+                               '-------------------- '))
+                if customer_exist(iD) == False:
+                    print('\nThere is not a customer added with that ID\n')
                 else:
-                    balance = deposit(balance, y)
+                    print('\nCustomer found\n' +
+                          'Welcome back ' + get_customers_name(iD))
 
-            elif x == 2:
-                y = int(input("""
+                amount = int((input("""
+    What would be the amount that you want to deposit into your account?
+    --------- """)))
+                if amount != int:
+                    raise ValueError(
+                        'Error -> The Amount should be in numbers \n')
+                else:
+                    balance = deposit(balance, amount)
+
+            elif option == 2:
+                print(
+                    '\nFirstable you need to provide your information in order to pull up your account')
+                iD = int(input('\nWhat is your ID?\n' +
+                               '-------------------- '))
+                if customer_exist(iD) == False:
+                    print('\nThere is not a customer added with that ID\n')
+                else:
+                    print('\nCustomer found\n' +
+                          'Welcome back ' + get_customers_name(iD))
+
+                amount = int(input("""
         What would be the amount that you want to withdraw?
         --------- """))
-                balance = withdraw(balance, y)
+                if amount != int:
+                    raise ValueError(
+                        'Error -> The Amount should be in numbers \n')
+                else:
+                    balance = withdraw(balance, amount)
 
-            elif x == 3:
+            elif option == 3:
                 show(balance)
 
             else:
                 raise ValueError(
-                    "Error -> The Option you chosee doesn't exist \n")
+                    'Error -> The Amount should be in numbers \n')
         if x == 3:
             print("\n\tThank you for using our services!\n" +
                   "\tEnjoy the rest of your day :) \n")
