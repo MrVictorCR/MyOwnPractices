@@ -16,7 +16,12 @@
         Create an account number randomly (random.choice(x number list))
         Save the name
         Provide with the debit card number, exp date, cvv, so on
+
+    We got everything right now, I just need to connect the information, so we can try to continue with different options
+    This in order to link the bank options, with the ATM options, it could be fine if just with the ID I get the info from the debit card, but of course that an ATM is use with a Debit Card
+    For the example is going to be in that way
 """
+
 
 import random
 
@@ -157,9 +162,6 @@ def seeYourInfo(iD):
         if i['ID'] == iD:
             info = (
                 f"ID: {i['ID']}, {i['Customer']}, {i['Debit Card Number']}")
-            # Customer is not an INT is a List, so I need to get access to the first place!,  Is not getting access to the first position
-            # SAVE ID IN A DIFFERENT WAY FOR ME TO GET THE INFO WITHOUT A PROBLEM
-
             return info
 
     return False
