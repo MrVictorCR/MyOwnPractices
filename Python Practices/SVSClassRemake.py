@@ -3,11 +3,12 @@ import random
 # - Vars that I need in the program -#
 
 balance = 0
-y = 0
+xAmount = 0
 loop = bool
 numbers = '12345678901234567890'
 customersDebitCards = []
 customers = []
+mbrATMInfo = []
 exitOption = False
 
 
@@ -21,6 +22,7 @@ class CreateMember():
         self.customersDict = {}
         self.debitCardsDict = {}
 
+# - Create Member Account - #
     def saveMemberAccount(self):
 
         long = 9
@@ -35,6 +37,7 @@ class CreateMember():
 
         print('Customer Account created, your account number is: ' + accountNumber)
 
+# - Create Member Card - #
     def createDebitCard(self):
 
         for i in customers:
@@ -46,7 +49,7 @@ class CreateMember():
                 randomNumbers = random.sample(numbers, long)
                 debitCardNumber = "".join(randomNumbers)
 
-                self.debitCardsDict['ID'] = iD
+                self.debitCardsDict['ID'] = self.iD
                 self.debitCardsDict['Customer'] = member
                 self.debitCardsDict['Debit Card Number'] = debitCardNumber
 
@@ -55,13 +58,18 @@ class CreateMember():
                       'Your debit card number is: ' +
                       debitCardNumber)
 
+# - See Ourself Info - #
     def seeYourInfo(self):
-        for i in customersDebitCards:
+        for i in customers:
             if i['ID'] == self.iD:
                 info = (
-                    f"ID: {i['ID']}, {i['Customer']}, {i['Debit Card Number']}")
-                return info
+                    f"ID: {i['ID']}, Name: {i['Name']} {i['Last Name']}, Account Number: {i['Account Number']}")
 
+                for i in customersDebitCards:
+                    if i['ID'] == self.iD:
+                        info = + (
+                            f"Card Number: {i['Debit Card Number']}")
+                return info
         return False
 
 # -----------------------------------#
@@ -77,24 +85,6 @@ def mainMenu():
 2. To Use the ATM Function
 3. Exit
 -------------------------- """))
-
-    except ValueError as UnexpectedNumber:
-        print(UnexpectedNumber)
-
-    finally:
-        return option
-
-# - Bank Menu: Displays the options that the Bank is going to have -#
-
-
-def bankMenu():
-
-    try:
-        option = int(input(f"""
-1. To Create a Bank Account
-2. To Request for a Debit Card
-3. To See your Information
------------------------------- """))
 
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
@@ -126,10 +116,101 @@ def secMenu():
     finally:
         return loop
 
+# - Bank Menu: Displays the options that the Bank is going to have -#
+
+
+def bankMenu():
+
+    try:
+        option = int(input(f"""
+1. To Create a Bank Account
+2. To Request for a Debit Card
+3. To See your Information
+------------------------------ """))
+
+    except ValueError as UnexpectedNumber:
+        print(UnexpectedNumber)
+
+    finally:
+        return option
+
+# - ATM Menu: Displays the options that the ATM is going to have -#
+
+
+def atmMenu():
+
+    try:
+        option = int(input(f"""
+1. To Deposit money in your account
+2. To withdraw money from your account
+3. To see the balance in your account
+---------------------------------------- """))
+
+    except ValueError as UnexpectedNumber:
+        print(UnexpectedNumber)
+
+    finally:
+        return option
 
 # -----------------------------------------------------------------#
 
+# - Adding ATM Functions - #
+
+
+def researchMember():
+    print('\nFirstable you need to provide your information in order to pull up your account')
+    iD = int(input('\nWhat is your ID?\n' +
+                   '-------------------- '))
+    conditional, mbrName = idMbrDebitCardExist(iD)
+    if conditional == False:
+        executingFunction = False
+    else:
+        print('\nCustomer found\n' +
+              'Welcome back ' + mbrName)
+        executingFunction = True
+
+    return executingFunction, iD, mbrName
+
+
+def deposit(iD, mbrName, balance, xAmount):
+    atmDict = {}
+
+    balance += xAmount
+    print(f"\n\tThe available balance in the account is {balance}$\n")
+
+    atmDict['ID'] = iD
+    atmDict['Member'] = mbrName
+    atmDict['Balance'] = balance
+
+    mbrATMInfo.append(atmDict)
+
+
+def withdraw(balance, amount, iD):
+
+    if balance < amount:
+        print(f"""
+    We apologize for the inconvenience but right now,
+    The available balance is less than what you want to withdraw
+    Your balance right now is: {balance}$""")
+
+    else:
+        for i in mbrATMInfo:
+            if i['ID'] == iD:
+                i['Balance'] = balance = - amount
+                print(
+                    f"\n\tThe available balance in the account is: {i['Balance']}$\n")
+
+
+def showBalance(iD):
+    for i in mbrATMInfo:
+        if i['ID'] == iD:
+            print(
+                f"\n\tThe available balance in the account is: {i['Balance']}$\n")
+
+# ------------------------ #
+
 # - General Functions - #
+
 
 def idCustomerExist(iD):
     if len(customers) == 0:
@@ -149,10 +230,11 @@ def idMbrDebitCardExist(iD):
     else:
         for i in customersDebitCards:
             if i['ID'] == iD:
+                mbrName = (f"{i['Name']}")
                 idCustomerCard = True
             else:
                 idCustomerCard = False
-    return idCustomerCard
+    return idCustomerCard, mbrName
 
 # -----------------------#
 
@@ -210,6 +292,47 @@ while (loop):
                     "Error -> The Option you chosee doesn't exist \n")
 
         """ Start with elif option 2: """
+        if optMenu == 2:
+            option = atmMenu()
+
+            if option == 1:
+                executingFunction, iD, mbrName = researchMember()
+                if executingFunction == True:
+                    amount = int((input("""
+            What would be the amount that you want to deposit into your account?
+            --------- """)))  # MAKE SURE THIS SAVE AN INT
+                    if amount != int:
+                        raise ValueError(
+                            'Error -> The Amount should be in numbers \n')
+                    else:
+                        deposit(iD, mbrName, balance, amount)
+                else:
+                    print('\nThere is not a customer added with that ID\n')
+
+            elif option == 2:  # we are on the 2nd step, make sure the changes
+                executingFunction, iD = researchMember()
+                if executingFunction == True:
+                    amount = int(input("""
+            What would be the amount that you want to withdraw?
+            --------- """))  # MAKE SURE THIS SAVE AN INT
+                    if amount != int:
+                        raise ValueError(
+                            'Error -> The Amount should be in numbers \n')
+                    withdraw(balance, amount, iD)
+                else:
+                    print('\nThere is not a customer added with that ID\n')
+
+            elif option == 3:
+                executingFunction, iD = researchMember()
+                if executingFunction == True:
+                    showBalance(balance)
+            else:
+                raise ValueError(
+                    'Error -> There is not option with the number you typed\n')
+        if optMenu == 3:
+            print("\n\tThank you for using our services!\n" +
+                  "\tEnjoy the rest of your day :) \n")
+            exitOption = True
 
     except ValueError as UnexpectedNumber:
         print(UnexpectedNumber)
@@ -219,3 +342,7 @@ while (loop):
             break
         else:
             loop = secMenu()
+
+# ----------------#
+
+# -    E n d    - #
