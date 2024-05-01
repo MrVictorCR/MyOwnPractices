@@ -19,56 +19,57 @@ class CreateMember():
         self.iD = iD
         self.name = name
         self.lastName = lastName
-        self.customersDict = {}
-        self.debitCardsDict = {}
 
 # - Create Member Account - #
     def saveMemberAccount(self):
-
+        customersDict = {}
         long = 9
         randomNumbers = random.sample(numbers, long)
         accountNumber = "".join(randomNumbers)
 
-        self.customersDict['ID'] = self.iD
-        self.customersDict['Name'] = self.name
-        self.customersDict['Last Name'] = self.lastName
-        self.customerDict['Account Number'] = accountNumber
-        customers.append(self.customersDict)
+        customersDict['ID'] = self.iD
+        customersDict['Name'] = self.name
+        customersDict['Last Name'] = self.lastName
+        customersDict['Account Number'] = accountNumber
+        customers.append(customersDict)
 
         print('Customer Account created, your account number is: ' + accountNumber)
 
 # - Create Member Card - #
-    def createDebitCard(self):
+    def createDebitCard(self, iD):
+
+        debitCardsDict = {}
 
         for i in customers:
-            if i['ID'] == self.iD:
-                member = (
-                    f"{i['Name']}, {i['Last Name']}, {i['Account Number']}")
+            if i['ID'] == iD:
+                mbrName = i['Name']
+                accountNumber = i['Account Number']
 
                 long = 16
                 randomNumbers = random.sample(numbers, long)
                 debitCardNumber = "".join(randomNumbers)
 
-                self.debitCardsDict['ID'] = self.iD
-                self.debitCardsDict['Customer'] = member
-                self.debitCardsDict['Debit Card Number'] = debitCardNumber
+                debitCardsDict['ID'] = iD
+                debitCardsDict['Customer'] = mbrName
+                debitCardsDict['Account Number'] = accountNumber
+                debitCardsDict['Debit Card Number'] = debitCardNumber
 
-                customersDebitCards.append(self.debitCardsDict)
-                print('Debit Card added' +
-                      'Your debit card number is: ' +
+                customersDebitCards.append(debitCardsDict)
+                print(mbrName + " your Debit Card was created" +
+                      ' Your debit card number is: ' +
                       debitCardNumber)
 
 # - See Ourself Info - #
-    def seeYourInfo(self):
+    def seeYourInfo(self, iD):
         for i in customers:
-            if i['ID'] == self.iD:
+            if i['ID'] == iD:
                 info = (
                     f"ID: {i['ID']}, Name: {i['Name']} {i['Last Name']}, Account Number: {i['Account Number']}")
 
                 for i in customersDebitCards:
                     if i['ID'] == self.iD:
-                        info = + (
-                            f"Card Number: {i['Debit Card Number']}")
+                        info = (
+                            info + f"Card Number: {i['Debit Card Number']}")
                 return info
         return False
 
@@ -157,22 +158,53 @@ def atmMenu():
 # - Adding ATM Functions - #
 
 
-def researchMember():
-    print('\nFirstable you need to provide your information in order to pull up your account')
-    iD = int(input('\nWhat is your ID?\n' +
-                   '-------------------- '))
+def researchMember(iD):
+    iD = iD
     conditional, mbrName = idMbrDebitCardExist(iD)
     if conditional == False:
         executingFunction = False
+        mbrATMAlreadyExist = False
     else:
         print('\nCustomer found\n' +
               'Welcome back ' + mbrName)
         executingFunction = True
+        mbrATMAlreadyExist = False
 
-    return executingFunction, iD, mbrName
+    return mbrATMAlreadyExist, executingFunction, iD, mbrName
 
 
-def deposit(iD, mbrName, balance, xAmount):
+def researchATMMember():
+    print('\nFirstable you need to provide your information in order to pull up your account')
+    iD = int(input('\nWhat is your ID?\n' +
+                   '-------------------- '))
+    if len(mbrATMInfo) > 0:
+        for i in mbrATMInfo:
+            if i['ID'] == iD:
+                mbrName = i['Member']
+                mbrATMAlreadyExist = True
+                executingFunction = False
+                return mbrATMAlreadyExist, executingFunction, iD, mbrName
+
+    print('Starting first deposit option')
+    if len(mbrATMInfo) == 0:
+
+        mbrATMAlreadyExist, executingFunction, iD, mbrName = researchMember(iD)
+        return mbrATMAlreadyExist, executingFunction, iD, mbrName
+    else:
+        mbrATMAlreadyExist, executingFunction, iD, mbrName = researchMember(iD)
+        return mbrATMAlreadyExist, executingFunction, iD, mbrName
+
+
+def deposit(iD, amount):
+    for i in mbrATMInfo:
+        if i['ID'] == iD:
+            balance = i['Balance']
+            i['Balance'] = balance + amount
+            print(
+                f"\n\tThe available balance in the account is: {i['Balance']}$\n")
+
+
+def firstTimeDeposit(iD, mbrName, balance, xAmount):
     atmDict = {}
 
     balance += xAmount
@@ -185,20 +217,23 @@ def deposit(iD, mbrName, balance, xAmount):
     mbrATMInfo.append(atmDict)
 
 
-def withdraw(balance, amount, iD):
+def withdraw(amount, iD):
 
-    if balance < amount:
-        print(f"""
-    We apologize for the inconvenience but right now,
-    The available balance is less than what you want to withdraw
-    Your balance right now is: {balance}$""")
+    for i in mbrATMInfo:
+        if i['ID'] == iD:
 
-    else:
-        for i in mbrATMInfo:
-            if i['ID'] == iD:
-                i['Balance'] = balance = - amount
+            balance = i['Balance']
+            if balance > amount:
+                i['Balance'] = balance - amount
                 print(
                     f"\n\tThe available balance in the account is: {i['Balance']}$\n")
+            else:
+                print(f"""
+We apologize for the inconvenience but right now,
+The available balance is less than what you want to withdraw
+Your balance right now is: {i['Balance']}$""")
+        else:
+            print('Member not founded')
 
 
 def showBalance(iD):
@@ -211,6 +246,8 @@ def showBalance(iD):
 
 # - General Functions - #
 
+# SEE WHAT THIS SHIT IS RETURNING
+
 
 def idCustomerExist(iD):
     if len(customers) == 0:
@@ -219,6 +256,7 @@ def idCustomerExist(iD):
         for i in customers:
             if i['ID'] == iD:
                 idCustomer = True
+                return idCustomer
             else:
                 idCustomer = False
     return idCustomer
@@ -230,10 +268,12 @@ def idMbrDebitCardExist(iD):
     else:
         for i in customersDebitCards:
             if i['ID'] == iD:
-                mbrName = (f"{i['Name']}")
+                mbrName = (f"{i['Customer']}")
                 idCustomerCard = True
+                return idCustomerCard, mbrName
             else:
                 idCustomerCard = False
+                mbrName = ''
     return idCustomerCard, mbrName
 
 # -----------------------#
@@ -264,24 +304,26 @@ while (loop):
                 else:
                     name = input('\nWhat is your First Name?\n' +
                                  '-------------------- ')
+
                     lastName = input('\nWhat is your Last Name?\n' +
                                      '-------------------- ')
                     mbr = CreateMember(iD, name, lastName)
-                    mbr.saveMemberAccount
+                    mbr.saveMemberAccount()
 
             elif option == 2:
                 iD = int(input('\nWhat is your ID?\n' +
                                '-------------------- '))
                 if idCustomerExist(iD):
-                    mbr.createDebitCard
+                    mbr.createDebitCard(iD)
                 else:
                     print("The customer doesn't exits")
 
             elif option == 3:
                 iD = int(input('\nWhat is your ID?\n' +
                                '-------------------- '))
-                if idMbrDebitCardExist(iD):
-                    info = mbr.seeYourInfo
+                iDCondition, mbrName = idMbrDebitCardExist(iD)
+                if iDCondition:
+                    info = mbr.seeYourInfo(iD)
                     if info == False:
                         print('Customer does not exist')
                     else:
@@ -296,36 +338,50 @@ while (loop):
             option = atmMenu()
 
             if option == 1:
-                executingFunction, iD, mbrName = researchMember()
-                if executingFunction == True:
+                mbrATMAlreadyExist, executingFunction, iD, mbrName = researchATMMember()
+                if mbrATMAlreadyExist == True:
+                    print('\nWelcome back ' + mbrName)
                     amount = int((input("""
-            What would be the amount that you want to deposit into your account?
-            --------- """)))  # MAKE SURE THIS SAVE AN INT
-                    if amount != int:
+What would be the amount that you want to deposit into your account?
+--------- """)))
+                    if amount > 0:
+                        deposit(iD, amount)
+                    else:
                         raise ValueError(
                             'Error -> The Amount should be in numbers \n')
+
+                elif executingFunction == True:
+                    amount = int((input("""
+What would be the amount that you want to deposit into your account?
+--------- """)))
+                    if amount > 0:
+                        firstTimeDeposit(iD, mbrName, balance, amount)
                     else:
-                        deposit(iD, mbrName, balance, amount)
+                        raise ValueError(
+                            'Error -> The Amount should be in numbers \n')
                 else:
                     print('\nThere is not a customer added with that ID\n')
 
-            elif option == 2:  # we are on the 2nd step, make sure the changes
-                executingFunction, iD = researchMember()
-                if executingFunction == True:
+            elif option == 2:
+                mbrATMAlreadyExist, executingFunction, iD, mbrName = researchATMMember()
+                if (executingFunction == True) or (mbrATMAlreadyExist == True):
                     amount = int(input("""
-            What would be the amount that you want to withdraw?
-            --------- """))  # MAKE SURE THIS SAVE AN INT
-                    if amount != int:
+What would be the amount that you want to withdraw?
+--------- """))
+                    if amount > 0:
+                        withdraw(amount, iD)
+                    else:
                         raise ValueError(
                             'Error -> The Amount should be in numbers \n')
-                    withdraw(balance, amount, iD)
                 else:
                     print('\nThere is not a customer added with that ID\n')
 
             elif option == 3:
-                executingFunction, iD = researchMember()
-                if executingFunction == True:
-                    showBalance(balance)
+                mbrATMAlreadyExist, executingFunction, iD, mbrName = researchATMMember()
+                if (executingFunction == True) or (mbrATMAlreadyExist == True):
+                    showBalance(iD)
+                else:
+                    print("Member not founded")
             else:
                 raise ValueError(
                     'Error -> There is not option with the number you typed\n')
