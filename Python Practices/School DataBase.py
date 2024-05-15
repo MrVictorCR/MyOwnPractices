@@ -48,7 +48,7 @@ def menu():
 
 # ----------------------------------------------------------------------#
 
-# - "Secondary Menu ('secMenu'): this will help when you will be requested if you want to use another function" -#
+# - "Secondary Menu ('secMenu'): this will help when you will be requested if you want to use another function" - #
 
 
 def secMenu():
@@ -72,7 +72,7 @@ def secMenu():
     finally:
         return condition
 
-# --------------------------------------------------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------------- #
 
 # - Adding DB Functions -#
 
@@ -126,7 +126,7 @@ def delete_a_student(iD):
         if i['ID'] == iD:
             database.remove(i)
             return True
-        return False
+    return False
 
 
 def show_students():

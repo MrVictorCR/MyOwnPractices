@@ -1,3 +1,36 @@
+"""
+    This is going to be a remake from the previous SVS ATM.py proyect, I'll be trying to use classes in order to have a better code.
+
+    What we know ->
+        In this program you will be able to see an ATM console program.
+        This will have different options in order for you to do your business
+    
+        I decided to practice different topics with this program:
+            Functions
+            Conditionals
+            Exceptions, so on
+
+        What I'm going to add will be a different function that is going to work as if you want to create a bank account
+        So firstable, 2 different menus: create an account - use the ATM Machine
+        The ATM machine is already created, so, we need to create the main menu, then the function regarding to create an account
+
+        Create account:
+            Import random
+            Create an account number randomly (random.choice(x number list))
+            Save the name
+            Provide with the debit card number, exp date, cvv, so on
+
+        We got everything right now, I just need to connect the information, so we can try to continue with different options
+        This in order to link the bank options, with the ATM options, it could be fine if just with the ID I get the info from the debit card, but of course that an ATM is use with a Debit Card
+        For the example is going to be in that way
+    
+    What I added ->
+        - Class CreateMember()
+
+    What I would like to do ->
+        - On the future version I'll try to use a PIN# to use the card 
+"""
+
 import random
 
 # - Vars that I need in the program -#
